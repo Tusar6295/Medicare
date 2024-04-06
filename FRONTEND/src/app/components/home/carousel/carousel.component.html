@@ -12,14 +12,14 @@
       <div class="carousel-item active" *ngFor="let chunk of specializationsChunks; let i = index" [class.active]="i === 0">
         <div class="row">
           <div class="col-md-3" *ngFor="let specialization of chunk; let j = index" >
-            <div id="categories" class="card" [class.highlighted]="i === clickedIndex && j === clickedCardIndex">
+            <div id="categories" class="card d-flex flex-column" [class.highlighted]="i === clickedIndex && j === clickedCardIndex">
               <img *ngIf="specialization.imageUrl" [src]="specialization.imageUrl" class="card-img-top img-style" alt="Specialization" />
               <img *ngIf="!specialization.imageUrl" class="card-img-top img-style" src="/assets/specialization.jpg" alt="Default Image" />
-              <div class="card-body">
+              <div class="body">
                 <h3 class="card-title fw-medium">{{ specialization.name | titlecase }}</h3>
                 <p class="card-text">{{ specialization.description }}</p>
-                <button class="btn btn-success" (click)="loadData(specialization.name); handleCardClick(i, j)">View Doctors</button>
               </div>
+              <button class="btn btn-success" (click)="loadData(specialization.name); handleCardClick(i, j)">View Doctors</button>
             </div>
           </div>
         </div>
@@ -60,7 +60,7 @@
       class="col-md-3"
       *ngFor="let doctor of doctors"
       [@slideInOut]="direction"
-      (click)="goToDoctorSlotBookingScreen(doctor)"
+      
     >
       <div class="card">
         <div class="card-body">
@@ -81,7 +81,7 @@
             </span>
           </p>
           <p class="card-text">Fees: <i class="bi bi-currency-rupee">{{doctor?.fees}} </i></p>
-          <button class="btn btn-success">
+          <button class="btn btn-success" (click)="goToDoctorSlotBookingScreen(doctor)">
             Book Appointment
           </button>
         </div>

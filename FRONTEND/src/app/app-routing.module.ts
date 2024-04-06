@@ -20,6 +20,7 @@ import { DoctorSlotBookingScreenComponent } from './pages/doctor-slot-booking-sc
 import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
 import { PatientReviewsComponent } from './components/doctor/patient-reviews/patient-reviews.component';
 import { UpcomingAppointmentsComponent } from './components/doctor/upcoming-appointments/upcoming-appointments.component';
+import { SlotBookingComponent } from './pages/slot-booking/slot-booking.component';
 
 const routes: Routes = [
   {
@@ -84,6 +85,11 @@ const routes: Routes = [
   {
     path: 'app-doctor-slot-booking-screen/:id',
     component: DoctorSlotBookingScreenComponent,
+    canActivate: [patientGuard]
+  },
+  {
+    path: 'slot-booking/:id',
+    component: SlotBookingComponent,
     canActivate: [patientGuard]
   },
   {

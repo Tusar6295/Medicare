@@ -229,17 +229,27 @@ export class AddDoctorComponent implements OnInit {
     const input = document.getElementById('spec-img') as HTMLInputElement;
     const file: File = input.files![0];
 
-    if (!file) {
+    if (file == null) {
       this.specialization.imageUrl = '';
       console.log("no file")
       this.adminService.saveSpecialization(this.specialization).subscribe({
         next: (data: any) => {
           console.log(data);
+          this.ngLoader.stopLoader('master');
           document.getElementById('close')?.click();
           this.specForm.reset();
-          this.ngLoader.stopLoader('master');
+          this.toast.success({
+            detail: 'SUCCESS',
+            summary: 'Specialization added successfully',
+            duration: 3000,
+          });
         },
         error: (err: HttpErrorResponse) => {
+          this.toast.error({
+            detail: 'ERROR',
+            summary: 'Something Went Wrong',
+            duration: 3000,
+          });
           console.log('something went wrong', err);
           this.ngLoader.stopLoader('master');
         },
@@ -253,9 +263,14 @@ export class AddDoctorComponent implements OnInit {
           this.adminService.saveSpecialization(this.specialization).subscribe({
             next: (data: any) => {
               console.log(data);
+              this.ngLoader.stopLoader('master');
               document.getElementById('close')?.click();
               this.specForm.reset();
-              this.ngLoader.stopLoader('master');
+              this.toast.success({
+                detail: 'SUCCESS',
+                summary: 'Specialization added successfully',
+                duration: 3000,
+              });
             },
             error: (err: HttpErrorResponse) => {
               console.log('something went wrong', err);
@@ -264,34 +279,29 @@ export class AddDoctorComponent implements OnInit {
           });
         },
         error: (err: HttpErrorResponse) => {
-          console.log('something went wrong', err);
+          if (
+            err.status == 400 &&
+            err.error.error.message == 'Unavailable image format'
+          ) {
+            this.toast.error({
+              detail: 'ERROR',
+              summary: 'Image format not supported',
+              duration: 3000,
+            });
+          }else{
+            this.toast.error({
+              detail: 'ERROR',
+              summary: `${err.error.message}`,
+              duration: 3000,
+            });
+            console.log('Error in uploading image', err);
+            this.ngLoader.stopLoader('master');
+          }
           this.ngLoader.stopLoader('master');
         },
       });
     }
-    this.ngLoader.startLoader("master");
-    this.imgService.upload(file).subscribe({
-      next: (data) => {
-        this.specialization.imageUrl = data;
-        this.adminService.saveSpecialization(this.specialization).subscribe({
-          next: (data: any) => {
-            console.log(data);
-            document.getElementById('close')?.click();
-            this.specForm.reset();
-            this.ngLoader.stopLoader("master");
-            window.location.reload();
-          },
-          error: (err: HttpErrorResponse) => {
-            console.log("something went wrong", err);
-            this.ngLoader.stopLoader("master");
-          }
-        })
-      },
-      error: (err: HttpErrorResponse) => {
-        console.log("something went wrong", err);
-        this.ngLoader.stopLoader("master");
-      }
-    })
+    
 
   }
   extractYearFromDate(date: string): string {

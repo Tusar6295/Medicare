@@ -113,7 +113,7 @@ export class Screen1Component {
         })
       } else {
         console.log(doctor);
-        this.router.navigate(['/app-doctor-slot-booking-screen', doctor.id]);
+        this.router.navigate(['/slot-booking', doctor.id]);
       }
     }
   }
@@ -169,30 +169,37 @@ export class Screen1Component {
     }
   }
 
+  // scrollToCarousel{() 
+  //   const element = document.getElementById('carousel-section');
+  //   if (element) {
+  //     const targetY = element.getBoundingClientRect().top + window.pageYOffset;
+  //     const initialY = window.pageYOffset;
+  //     const distance = targetY - initialY;
+  //     const duration = 1000;
+  //     let start: number;
+
+  //     function step(timestamp: number) {
+  //       if (!start) start = timestamp;
+  //       const elapsed = timestamp - start;
+  //       const progress = Math.min(elapsed / duration, 1);
+  //       window.scrollTo(0, initialY + distance * ease(progress));
+
+  //       if (elapsed < duration) {
+  //         requestAnimationFrame(step);
+  //       }
+  //     }
+
+  //     function ease(t: number): number {
+  //       return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+  //     }
+  //     requestAnimationFrame(step);
+  //   }
+  // }
+
   scrollToCarousel() {
-    const element = document.getElementById('carousel-section');
-    if (element) {
-      const targetY = element.getBoundingClientRect().top + window.pageYOffset;
-      const initialY = window.pageYOffset;
-      const distance = targetY - initialY;
-      const duration = 1000;
-      let start: number;
-
-      function step(timestamp: number) {
-        if (!start) start = timestamp;
-        const elapsed = timestamp - start;
-        const progress = Math.min(elapsed / duration, 1);
-        window.scrollTo(0, initialY + distance * ease(progress));
-
-        if (elapsed < duration) {
-          requestAnimationFrame(step);
-        }
-      }
-
-      function ease(t: number): number {
-        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-      }
-      requestAnimationFrame(step);
+    const element = document.getElementById("carousel-section");
+    if(element){
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }
 }

@@ -181,26 +181,50 @@ img {
   background-color: #23af62;
 }
 
-@media (max-width: 1440px) {
-    
-    .doctor-details{
-        height: 70%;
+@media (max-width: 768px) {
+    .panel {
+        height: auto;
+    }
+
+    .doctor-details {
         padding: 1rem;
+        overflow-y: auto; /* Add overflow property */
+        max-height: calc(100vh - 200px); /* Set maximum height */
     }
 
-    .title{
-        margin-bottom: 1rem;
-    }
-
-    .form-style{
+    .title {
+        flex-direction: column;
+        align-items: center;
         gap: 1rem;
     }
 
-    .form-left,.form-right{
+    .spec-btn {
+        width: 100%;
+        margin: 0;
+    }
+
+    .form-style {
+        flex-direction: column;
         gap: 1rem;
+    }
+
+    .form-left,
+    .form-right {
+        width: 100%;
+        gap: 1rem;
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+
+    #submit {
+        width: 100%;
     }
 }
-  
+
+/* Adjustments for medium-sized screens */
 @media (max-width: 992px) {
     .panel {
         flex-direction: column;
@@ -240,27 +264,15 @@ img {
     }
 }
 
-/* Adjustments for smaller screens */
-@media (max-width: 768px) {
-    .panel {
-        height: auto;
-    }
-
+/* Adjustments for larger screens */
+@media (max-width: 1440px) {
     .doctor-details {
+        height: 70%;
         padding: 1rem;
-        overflow-y: auto; /* Add overflow property */
-        max-height: calc(100vh - 200px); /* Set maximum height */
     }
 
     .title {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .spec-btn {
-        width: 100%;
-        margin: 0;
+        margin-bottom: 1rem;
     }
 
     .form-style {
@@ -269,12 +281,6 @@ img {
 
     .form-left,
     .form-right {
-        width: 100%;
-    }
-
-    #submit {
-        width: 100%;
+        gap: 1rem;
     }
 }
-
-

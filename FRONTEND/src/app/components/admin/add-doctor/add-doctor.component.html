@@ -141,10 +141,10 @@
           </div>
           <div class="form-group group">
             <label for="desc">Description<span class="text-danger ms-2">*</span></label>
-            <textarea id="desc" name="desc" class="form-control" rows="4" maxlength="250"
+            <textarea id="desc" name="desc" class="form-control" rows="4" maxlength="300"
               [(ngModel)]="specialization.description" formControlName="desc" required></textarea>
             <small class="form-text text-muted">
-              Max 250 characters.
+              Max 300 characters.
             </small>
             <div *ngIf="specForm.get('desc')?.invalid && specForm.get('desc')?.touched" class="text-danger">
               <div *ngIf="specForm.get('desc')?.errors?.['required']">Description is required.</div>

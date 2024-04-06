@@ -79,6 +79,7 @@ import {
   ConfirmBoxConfigModule,
   ToastNotificationConfigModule
 } from '@costlydeveloper/ngx-awesome-popup';
+import { SlotBookingComponent } from './pages/slot-booking/slot-booking.component';
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
 @NgModule({
@@ -114,6 +115,7 @@ import {
     DonutChartComponent,
     PagenotfoundComponent,
     PatientReviewsComponent,
+    SlotBookingComponent,
   ],
   imports: [
     MatTooltipModule,

@@ -79,7 +79,7 @@ export class CarouselComponent {
         });
       } else {
         console.log(doctor);
-        this.router.navigate(['/app-doctor-slot-booking-screen', doctor.id]);
+        this.router.navigate(['/slot-booking', doctor.id]);
       }
     }
   }
