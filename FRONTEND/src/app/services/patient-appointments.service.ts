@@ -16,10 +16,18 @@ export class PatientAppointmentsService {
       offset: offset,
       pageSize: pageSize,
       appointmentStatus: appStatus,
-
     };
     return this.http.post<any>(`${this.baseUrl}/search/searchAppointments`, requestBody);
   }
+
+  // getAppointments(patientId: any, date: string, appStatus: string): Observable<any> {
+  //   const requestBody = {
+  //     patientId: patientId,
+  //     appDate: date,
+  //     appStatus: appStatus, 
+  //   };
+  //   return this.http.post<any>(`${this.baseUrl}/patient/getAppointments`, requestBody);
+  // }
 
   getFeedbackByPatientId(patientId: any): Observable<any> {
     const params = new HttpParams().set('id', patientId);

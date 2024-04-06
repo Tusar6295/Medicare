@@ -8,6 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.springframework.core.annotation.Order;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nrifintech.medicalmanagementsystem.utility.annotations.PastDate;
 import com.nrifintech.medicalmanagementsystem.utility.enums.AppointmentStatus;
 import com.nrifintech.medicalmanagementsystem.utility.enums.Slot;

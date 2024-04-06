@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
@@ -25,32 +26,130 @@ export class SlotBookingComponent implements OnInit {
   ];
 
   slotMap: { [key: string]: boolean } = {};
-  appointmentMap: { [key: string]: boolean } = {};
-  currentDoctorAppointmentMap: { [key: string]: boolean } = {};
   appointments: Appointment[] = [];
-  selectedDate: string | null = null;
-  selectedSlot: string | null = null;
-  doctorDetails: Doctor | null = null;
+  selectedDate: string = "";
+  selectedSlot: string = "";
   slots: string[] = [];
-  // dates: Date[] = [];
-  direction: 'next' | 'previous' = 'next';
-  visibleDates: StringPair[] = [];
-  currentIndex: number = 0;
   feedback: { review: string; rating: number; }[] = [];
-  // dayNames: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  doctorDetails: Doctor = {
+    id: 0,
+    name: '',
+    gender: '',
+    qualification: '',
+    email: '',
+    fees: 0,
+    experienceStart: '',
+    specialization: '',
+    leaveStart: '',
+    leaveEnd: '',
+    rating: 0,
+    status: '',
+    userName: '',
+    password: '',
+    profileImgUrl: ''
+  };
 
-  constructor(private doctorAppointmentsService: DoctorAppointmentsService, private dialog: MatDialog, private route: ActivatedRoute, private patientAppointmentsService: PatientAppointmentsService) {
+  constructor(private doctorAppointmentsService: DoctorAppointmentsService,
+    private dialog: MatDialog, private route: ActivatedRoute,
+    private patientAppointmentsService: PatientAppointmentsService) {
 
-    // const today = new Date();
-    // for (let i = 1; i < 8; i++) {
-    //   const nextDate = new Date();
-    //   nextDate.setDate(today.getDate() + i);
-    //   this.dates.push([this.dateFormat(nextDate),this.dayNames[nextDate.getDay()]]);
-    // }
-    // this.updateVisibleDates();
   }
 
   availableDates: Date[] = [];
+  isActiveSlot: boolean = false;
+
+  ngOnInit(): void {
+    this.generateDates();
+    let doctorId: Number;
+    this.route.params.subscribe(params => {
+      doctorId = params['id'];
+
+      this.doctorAppointmentsService.getParticularDoctor(doctorId).subscribe({
+        next: (data: Doctor) => {
+          this.doctorDetails = data;
+          console.log("doctor fetched", data);
+          console.log("doctor fetched", this.doctorDetails);
+          this.loadReviews();
+        },
+        error: (err: HttpErrorResponse) => {
+          console.log("Error in fetching doctor details", err);
+        }
+      })
+
+     
+    });
+
+
+
+    this.selectedDate = "";
+    this.selectedSlot = "";
+  }
+
+  generateDates() {
+    const today = new Date();
+    for (let i = 0; i < 7; i++) {
+      const newDate = new Date(today.getTime() + ((i + 1) * 24 * 60 * 60 * 1000));
+      this.availableDates.push(newDate);
+    }
+  }
+
+  getStarArray(rating: number | undefined): number[] {
+    if (rating === undefined)
+      return Array(5).fill(0)
+    const roundedRating = Math.round(rating);
+    return Array(roundedRating).fill(0);
+  }
+
+  onDateClick(date: Date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    const formattedDate = `${year}-${month}-${day}`;
+    this.selectedDate = formattedDate;
+    this.selectedSlot = "";
+    console.log("selected date:", this.selectedDate)
+    console.log("selected date:", this.selectedDate)
+    console.log("selected date:", this.selectedDate)
+
+    this.doctorAppointmentsService.getAppointments(
+      this.doctorDetails.id,this.selectedDate).subscribe({
+        next: (data) => {
+          console.log("Appointments of doctor for date: " + this.selectedDate , data);
+        }
+    })
+  }
+
+  isActive(date: Date): boolean {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    const formattedDate = `${year}-${month}-${day}`;
+    return this.selectedDate == formattedDate;
+  }
+
+  onSlotClick(slot: string) {
+    this.isActiveSlot == true;
+    this.selectedSlot = slot;
+
+    console.log("SLOT CLICKED!" + this.selectedSlot)
+    // alert('Selected slot:');
+  }
+
+  loadReviews() {
+    console.log(this.doctorDetails.id);
+    this.doctorAppointmentsService.getReviews(this.doctorDetails.id).subscribe({
+      next: (data: any) => {
+        this.feedback = data;
+        console.log("feedback ", data);
+      },
+      error: (err: HttpErrorResponse) => {
+        console.log("Error in fetching reviews", err);
+      }
+    })
+  }
+
   customOptions: OwlOptions = {
     loop: false,
     mouseDrag: true,
@@ -61,10 +160,10 @@ export class SlotBookingComponent implements OnInit {
     navText: ['<i class="fa-solid fa-caret-left fa-2x"></i>', '<i class="fa-solid fa-caret-right fa-2x"></i>'],
     responsive: {
       0: {
-        items: 4
+        items: 2
       },
       400: {
-        items: 4
+        items: 3
       },
       740: {
         items: 4
@@ -76,303 +175,32 @@ export class SlotBookingComponent implements OnInit {
     nav: true
   }
 
-  ngOnInit(): void {
-    this.generateDates();
-    let doctorId: Number;
-    this.route.params.subscribe(params => {
-      doctorId = params['id'];
-      //console.log(" doctor id " +doctorId);
-
-      this.doctorAppointmentsService.getParticularDoctor(doctorId).subscribe((response) => {
-        response.experienceStart = parseInt(response.experienceStart);
-        this.doctorDetails = response;
-        this.loadReviews();
-
+  reviewOptions: OwlOptions = {
+    loop: true,
+    mouseDrag: true,
+    touchDrag: false,
+    pullDrag: false,
+    dots: false,
+    navSpeed: 700,
+    navText: ['<i class="fa-solid fa-angle-left fa-2x"></i>', '<i class="fa-solid fa-angle-right fa-2x"></i>'],
+    autoplay: true, 
+    autoplayTimeout: 5000, 
+    autoplaySpeed: 1000,
+    autoplayHoverPause: true,
+    responsive: {
+      0: {
+        items: 1
       },
-        (error) => {
-          console.log("Error fetching doctor details: ", error);
-        });
-      this.patientAppointmentsService.searchAppointments(localStorage.getItem("patientId"), 0, 100, "PENDING").subscribe(
-        (response: any) => {
-          response.cookies.content.forEach((appointment: { appDate: any[]; slot: string; doctorId: number; }) => {
-            const key = new Date(Number(appointment.appDate[0]), (Number(appointment.appDate[1]) - 1), Number(appointment.appDate[2]) + 1).toISOString().substring(0, 10) + '-' + appointment.slot;
-            if (appointment.doctorId == doctorId) {
-              this.currentDoctorAppointmentMap[key] = true;
-            }
-            else {
-              this.slotMap[key] = true;
-            }
-            //console.log(key);
-          });
-        },
-        (error: any) => {
-          console.error('Error fetching appointments:', error);
-        });
-
-      this.doctorAppointmentsService.getAppointmentsOfDoctor(doctorId).subscribe(
-        (response) => {
-
-          this.appointments = response.cookies.content;
-          // console.log(this.appointments);
-          this.appointments.forEach(appointment => {
-            const key = new Date(Number(appointment.appDate[0]), (Number(appointment.appDate[1]) - 1), Number(appointment.appDate[2]) + 1).toISOString().substring(0, 10) + '-' + appointment.slot;
-
-            // console.log(key);
-            let tempId: string | null = "";
-            tempId = localStorage.getItem("patientId");
-            if (tempId !== null) {
-              const patientId = tempId;
-              if (parseInt(patientId) !== appointment.patientId)
-                this.appointmentMap[key] = true;
-            }
-          });
-        },
-        (error) => {
-          console.error('Error fetching appointments:', error);
-        })
-      // Use the id to fetch associated data or perform any other logic
-    });
-  }
-
-  generateDates() {
-    const today = new Date();
-    for (let i = 0; i < 7; i++) {
-      const newDate = new Date(today.getTime() + (i * 24 * 60 * 60 * 1000));
-      this.availableDates.push(newDate); // Initially mark all dates as unbooked (replace with your logic to check actual bookings)
-    }
-  }
-
-  // toNumber(experienceStart: string) {
-  //   return parseInt(experienceStart);
-  // }
-
-  // private dateFormat(date: Date): string {
-  //   const day = date && date.getDate() || -1;
-  //   const dayWithZero = day.toString().length > 1 ? day : '0' + day;
-  //   const month = date && date.getMonth() + 1 || -1;
-  //   const monthWithZero = month.toString().length > 1 ? month : '0' + month;
-  //   const year = date && date.getFullYear() || -1;
-  //   return `${year}-${monthWithZero}-${dayWithZero}`;
-  // }
-
-  getStarArray(rating: number | undefined): number[] {
-    if (rating === undefined)
-      return Array(5).fill(0)
-    const roundedRating = Math.round(rating);
-    return Array(roundedRating).fill(0);
-  }
-
-
-  // onDateClick(date: StringPair) {
-  //   this.selectedDate = date[0];
-  //   this.selectedSlot = null;
-  //   console.log('Selected date:', this.selectedDate);
-  // }
-
-  onDateClick(date: Date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Add 1 because months are zero-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-
-    const formattedDate = `${year}-${month}-${day}`;
-    this.selectedDate = formattedDate;
-    console.log("selected date:", this.selectedDate)
-  }
-
-  isActive(date: Date): boolean {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Add 1 because months are zero-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-
-    const formattedDate = `${year}-${month}-${day}`;
-    return this.selectedDate == formattedDate;
-  }
-
-  onSlotClick(slot: string) {
-    this.selectedSlot = slot;
-    console.log('Selected slot:', this.selectedSlot);
-  }
-
-
-
-
-  // updateVisibleDates() {
-  //   this.visibleDates = this.dates.slice(this.currentIndex, this.currentIndex + 4);
-  // }
-
-
-
-
-  // onNextClick() {
-  //   if (this.currentIndex + 3 < this.dates.length) {
-  //     this.currentIndex += 3;
-  //     this.updateVisibleDates();
-  //   }
-  // }
-
-
-  // onPrevClick() {
-  //   if (this.currentIndex - 3 >= 0) {
-  //     this.currentIndex -= 3;
-  //     this.updateVisibleDates();
-  //   }
-  // }
-
-
-
-
-  isSlotBooked(date: string | null, slot: number): boolean {
-    if (!date || !slot) {
-      return false; // or handle null case appropriately
-    }
-    const key = date + '-' + (slot);
-
-    return this.appointmentMap.hasOwnProperty(key);
-  }
-
-
-  isSlotBookedWithOtherDoctor(date: string | null, slot: number): boolean {
-    if (!date || !slot) {
-      return false; // or handle null case appropriately
-    }
-    const key = date + '-' + (slot);
-    console.log(this.slotMap.hasOwnProperty(key))
-    console.log(key)
-    return this.slotMap.hasOwnProperty(key);
-  }
-
-  isSlotBookedWithThisDoctor(date: string | null, slot: number): boolean {
-    if (!date || !slot) {
-      return false; // or handle null case appropriately
-    }
-    const key = date + '-' + (slot);
-    console.log(this.slotMap.hasOwnProperty(key))
-    console.log(key)
-    return this.currentDoctorAppointmentMap.hasOwnProperty(key);
-  }
-
-
-  onBookClick(): void {
-    //console.log("BOOKED")
-    const dialogRef = this.dialog.open(BookModalComponent, {
-      width: '400px', // Set the width of the modal
-      data: {
-        isError: 1,
-        message: "Booking slot",
-        selectedDate: this.selectedDate,
-        selectedSlot: this.selectedSlot
+      400: {
+        items: 1
+      },
+      740: {
+        items: 1
+      },
+      940: {
+        items: 1
       }
-    });
-
-
-
-    dialogRef.afterClosed().subscribe((result: any) => {
-      // console.log(result);
-
-      if (this.selectedSlot !== null) {
-        let index = this.timeMap.indexOf(this.selectedSlot) + 1;
-
-        if (result.result == true) {
-          console.log("Inside")
-          this.doctorAppointmentsService.bookDoctorAppointment(this.doctorDetails?.id, localStorage.getItem("patientId"), this.selectedDate, index)
-            .subscribe((response) => {
-              // console.log(response);
-              const dialogRef = this.dialog.open(BookModalComponent, {
-                width: '400px', // Set the width of the modal
-                data: {
-                  isError: 2,
-                  message: "Successfully Booked",
-                  selectedDate: this.selectedDate,
-                  selectedSlot: this.selectedSlot
-                }
-              })
-
-            },
-              (error) => {
-                console.log(error);
-                const dialogRef = this.dialog.open(BookModalComponent, {
-                  width: '400px', // Set the width of the modal
-                  data: {
-                    isError: 3,
-                    message: error.error.message,
-                    selectedDate: this.selectedDate,
-                    selectedSlot: this.selectedSlot
-                  }
-                });
-              })
-        }
-      }
-    });
-  }
-  isButtonDisabled(): boolean {
-    return (this.selectedDate == null || this.selectedSlot == null);
-  }
-
-  page: number = 0;
-  pages: Array<number> = [];
-  isPreviousDisabled: boolean = true; // Initialize as true since user starts at page 0
-  isNextDisabled: boolean = false;
-  // 'next' for next direction, 'previous' for previous direction
-
-  updateButtonState() {
-    this.isPreviousDisabled = this.page === 0; // Disable Previous button on first page
-    this.isNextDisabled = this.page === this.pages.length - 1; // Disable Next button on last page
-  }
-
-  getCurrentYear(): number {
-    return new Date().getFullYear();
-  }
-
-  loadReviews() {
-
-    this.doctorAppointmentsService.getReviewsOfDoctor(this.doctorDetails?.id, this.page, 1).subscribe((response) => {
-      this.feedback = [];
-      response.cookies.content.forEach((feedbacks: { review: string; rating: number; }) => {
-        this.feedback.push({
-          review: "\"" + feedbacks.review + "\"",
-          rating: feedbacks.rating
-        });
-        // console.log("feedback" + this.feedback);
-        this.pages = new Array(response.cookies.totalPages);
-        // console.log(response.cookies.totalPages);
-
-      })
     },
-      (error) => {
-        console.log("Error fetching feedback: ", error);
-      });
-
   }
-
-  setPage(i: any, event: any) {
-    event.preventDefault();
-    if (i > this.page) {
-      this.direction = 'next'; // Set direction to next
-    } else {
-      this.direction = 'previous'; // Set direction to previous
-    }
-    this.page = i;
-    this.updateButtonState(); // Update button state
-    this.loadReviews();
-  }
-
-  pageIncrement() {
-    if (this.page < this.pages.length) {
-      this.page++;
-      this.direction = 'next'; // Set direction to previous
-      this.updateButtonState(); // Update button state
-      this.loadReviews();
-    }
-  }
-
-  pageDecrement() {
-    if (this.page > 0) {
-      this.page--;
-      this.direction = 'previous'; // Set direction to next
-      this.updateButtonState(); // Update button state
-      this.loadReviews();
-    }
-  }
-
 }
 

@@ -109,8 +109,6 @@ export class DoctorSlotBookingScreenComponent {
     this.route.params.subscribe(params => {
       doctorId = params['id'];
 
-
-
       this.doctorAppointmentsService.getParticularDoctor(doctorId).subscribe((response) => {
         response.experienceStart = parseInt(response.experienceStart);
         this.doctorDetails=response;
@@ -147,9 +145,6 @@ export class DoctorSlotBookingScreenComponent {
               this.slotMap[key] = true;
             }
             console.log(key);
-
-
-
           });
         },
         (error) => {
@@ -173,9 +168,6 @@ export class DoctorSlotBookingScreenComponent {
                 this.appointmentMap[key] = true;
             }
           });
-
-
-
         },
         (error) => {
           console.error('Error fetching appointments:', error);
@@ -281,8 +273,8 @@ export class DoctorSlotBookingScreenComponent {
       return false; // or handle null case appropriately
     }
     const key = date + '-' + (slot);
-    console.log(this.slotMap.hasOwnProperty(key))
-    console.log(key)
+    // // console.log(this.slotMap.hasOwnProperty(key))
+    // console.log(key)
     return this.slotMap.hasOwnProperty(key);
   }
 
@@ -291,8 +283,8 @@ export class DoctorSlotBookingScreenComponent {
       return false; // or handle null case appropriately
     }
     const key = date + '-' + (slot);
-    console.log(this.slotMap.hasOwnProperty(key))
-    console.log(key)
+    // console.log(this.slotMap.hasOwnProperty(key))
+    // console.log(key)
     return this.currentDoctorAppointmentMap.hasOwnProperty(key);
   }
 

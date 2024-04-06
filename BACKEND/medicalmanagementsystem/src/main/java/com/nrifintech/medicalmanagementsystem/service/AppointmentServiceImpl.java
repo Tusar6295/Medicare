@@ -293,6 +293,12 @@ public class AppointmentServiceImpl implements AppointmentService {
                 appointmentRepository.updateAppointmentStatus(LocalDate.now(),slotTimeMapper.getSlotFromTime(LocalDateTime.now().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")).toString()));
         }
 
+        @Override
+        public List<AppointmentSearchResponseDTO> getAppointmentsOfDoctor(Long doctorId,AppointmentStatus appStatus,LocalDate appDate)
+        {
+                List<AppointmentSearchResponseDTO> doctorAppointments = appointmentRepository.findAppointmentsOfDoctors(appDate,doctorId,appStatus);
+                return doctorAppointments;
+        }
        
 
 }

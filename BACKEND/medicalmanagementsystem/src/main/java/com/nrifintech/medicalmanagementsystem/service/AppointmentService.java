@@ -17,6 +17,7 @@ import com.nrifintech.medicalmanagementsystem.dto.AppointmentSearchRequestDTO;
 import com.nrifintech.medicalmanagementsystem.dto.AppointmentSearchResponseDTO;
 import com.nrifintech.medicalmanagementsystem.dto.DashboardDataDTO;
 import com.nrifintech.medicalmanagementsystem.model.Appointment;
+import com.nrifintech.medicalmanagementsystem.utility.enums.AppointmentStatus;
 
 import jakarta.persistence.PessimisticLockException;
 import jakarta.validation.ConstraintViolationException;
@@ -30,5 +31,7 @@ public interface AppointmentService {
     public Appointment getAppointmentById(Long appointment_id) throws InvalidAttributeValueException; 
     public Page<AppointmentSearchResponseDTO> searchAppointments(AppointmentSearchRequestDTO appointmentSearchRequestDTO);
     public void updateAppointmentStatus();
+
+    public List<AppointmentSearchResponseDTO> getAppointmentsOfDoctor(Long doctorId, AppointmentStatus appStatus, LocalDate appDate);
     
 }

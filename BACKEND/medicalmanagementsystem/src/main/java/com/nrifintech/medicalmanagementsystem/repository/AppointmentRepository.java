@@ -199,6 +199,19 @@ List<DoctorDistribution> findDoctorDistribution(@Param("startDate") LocalDate st
 
     List<Appointment> findByAppStatusAndAppDateBetweenOrderByAppDateAsc(AppointmentStatus status, LocalDate oneWeekAgo, LocalDate today);
 
+
+    @Query("SELECT new com.nrifintech.medicalmanagementsystem.dto.AppointmentSearchResponseDTO(a.id, d.id, d.name, p.id, p.name, a.appDate, a.slot, a.appStatus, s.name) " +
+    "FROM Appointment a " +
+    "JOIN a.doctor d " +
+    "JOIN a.patient p " +
+    "JOIN d.specialization s " +
+    "WHERE (:appDate IS NULL OR a.appDate = :appDate) " +
+    "AND (:doctorId IS NULL OR a.doctor.id = :doctorId) " +
+    "AND (:appStatus IS NULL OR a.appStatus = :appStatus)")
+List<AppointmentSearchResponseDTO> findAppointmentsOfDoctors(@Param("appDate") LocalDate appDate, 
+                                                                    @Param("doctorId") Long doctorId, 
+                                                                    @Param("appStatus") AppointmentStatus appStatus);
+
    
 }
 

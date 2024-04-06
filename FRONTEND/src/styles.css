@@ -28,6 +28,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; zoom:100%; 
     color: var(--main-color) !important;
     position: absolute;
     top:25%;
+    
 }
 
 .carousel-container .owl-next{
@@ -37,3 +38,23 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; zoom:100%; 
 .carousel-container .owl-prev{
     left: 0;
 }
+
+
+.feedback-container .owl-prev, .feedback-container .owl-next{
+    background: transparent !important;
+    color: var(--main-color) !important;
+    position: absolute;
+    top:15%; 
+    z-index: 1;
+
+}
+
+.feedback-container .owl-next{
+    right: 1rem;
+}
+
+.feedback-container .owl-prev{
+    left: 1rem;
+}
+
+

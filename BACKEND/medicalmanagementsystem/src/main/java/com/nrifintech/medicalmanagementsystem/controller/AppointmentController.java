@@ -24,11 +24,12 @@ import com.nrifintech.medicalmanagementsystem.service.AppointmentService;
 import com.nrifintech.medicalmanagementsystem.service.FeedbackService;
 import com.nrifintech.medicalmanagementsystem.service.GenerateResponseService;
 import com.nrifintech.medicalmanagementsystem.service.ReportGenerationService;
+import com.nrifintech.medicalmanagementsystem.utility.enums.AppointmentStatus;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("appointment")
+@RequestMapping("/appointment")
 public class AppointmentController {
 
     @Autowired
@@ -64,7 +65,17 @@ public class AppointmentController {
                 HttpStatus.OK,
                 appointmentService.cancelAppointment(id));
     }
-
+    
+    @PostMapping("/getAppointments")
+    public ResponseEntity<Object> getAppointmentsOfDoctor(
+        @RequestParam Long doctorId, 
+        @RequestParam AppointmentStatus appStatus,
+        @RequestParam LocalDate appDate){
+            return generateResponseService.generateResponse(
+                "Appointment fetched successfully",
+                HttpStatus.OK,
+                appointmentService.getAppointmentsOfDoctor(doctorId,appStatus,appDate));
+        }
     // @PostMapping("/searchAppointments")
     // public ResponseEntity<Object> searchAppointments(@Valid @RequestBody AppointmentSearchRequestDTO appointmentSearchRequestDTO)
     // {

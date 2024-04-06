@@ -24,6 +24,16 @@ export class DoctorAppointmentsService {
     };
     return this.http.post<any>(`${this.searchUrl}/searchAppointments`, requestBody);
   }
+
+  getAppointments(doctorId: any, date: string): Observable<any> {
+    const requestBody = {
+      appDate: date,
+      doctorId: doctorId,
+      appStatus: "PENDING", 
+    };
+    return this.http.post<any>(`${this.baseUrl}/appointment/getAppointments`, requestBody);
+  }
+
   getReviewsOfDoctor(doctorId: any, page: any, size: any): Observable<any> {
     const params = new HttpParams().set('id', doctorId).set('page', page).set('size', size);
     // Make the GET request with parameters
@@ -33,16 +43,14 @@ export class DoctorAppointmentsService {
   getReviewsOfDoctor1(doctorId: any): Observable<any> {
     return this.http.get<any>(`${this.feedbackUrl}/get-feedback-once?id=${doctorId}`);
   }
+
   getReviews(doctorId: any): Observable<any> {
-    const params = new HttpParams().set('id', doctorId);
+    const params = new HttpParams().set('doctorId', doctorId);
     // Make the GET request with parameters
-    return this.http.get<any>(`${this.searchUrl}/get-feedback`, { params });
+    return this.http.get<any>(`${this.searchUrl}/feedback`, { params });
   }
 
   getParticularDoctor(doctorId: any): Observable<any> {
-
-    // Make the GET request with parameters
-    // return this.http.get<any>(`/api/users/${userId}`);
     console.log("INSDIE SERVICE")
     return this.http.get<any>(`${this.patientUrl}/get-particular-doctor/${doctorId}`);
   }

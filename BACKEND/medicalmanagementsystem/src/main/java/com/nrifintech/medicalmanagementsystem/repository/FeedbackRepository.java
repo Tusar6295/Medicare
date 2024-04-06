@@ -27,7 +27,7 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long>{
     
  
 
-    @Query(value = "SELECT f.id, f.appointment_id, f.rating, f.review FROM Feedback f " +
+    @Query(value = "SELECT  f.appointment_id, f.rating, f.review FROM Feedback f " +
     "JOIN Appointment a ON f.appointment_id = a.id " +
     "JOIN Doctor d ON a.doctor_id = d.id " +
     "WHERE d.id = :doctorId ORDER BY f.rating DESC", nativeQuery = true)
