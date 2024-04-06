@@ -1,0 +1,54 @@
+ <app-navbar></app-navbar>
+    <div class="main-container">
+        <div class="profile">
+            <div class="details">
+                <img *ngIf="doctorDetails?.profileImgUrl" [src]="doctorDetails?.profileImgUrl" alt="">
+                <img *ngIf="!doctorDetails?.profileImgUrl" src="/assets/default-pic.jpg" alt="">
+            </div>
+        </div>
+        <div class="booking">
+            <div id="booking-title" class="w-100 text-center">
+                <h5>SELECT THE DATE AND TIME FOR YOUR APPOINTMENT:</h5>
+            </div>
+            <div class="reviews">
+                <h4 style="color: var(--main-color)">Top Reviews</h4>
+                <div class="feedback">
+                    <button type="button" class="arrow-button arrow-right" *ngIf="page !== 0"
+                        (click)="page!==0 && pageDecrement()" [class.disabled]="page===0"><a class="page-link"><i
+                                class="fas fa-chevron-left"></i></a></button>
+                    <div class="review-text" *ngIf="feedback.length > 0; else elseBlock">
+                        <p class="fs-4 mb-1">{{ feedback[0].review}}</p>
+                        <p class="card-text fs-4">Rating: <span *ngFor="let star of getStarArray(feedback[0].rating)"><i
+                                    class="bi bi-star-fill" style="color: rgb(216, 151, 30)"></i></span></p>
+                    </div>
+                    <button type="button" class="arrow-button arrow-right"
+                        *ngIf="page !== pages.length - 1 && pages.length!==0" [class.disabled]="page===pages.length-1"><a
+                            class="page-link" (click)="pageIncrement()"><i class="fas fa-chevron-right"></i></a></button>
+                </div>
+                <ng-template #elseBlock>
+                    <p>No more reviews yet</p>
+                </ng-template>
+            </div>
+            <div class="carousel-container">
+                <owl-carousel-o [options]="customOptions">
+                    <ng-template carouselSlide *ngFor="let date of availableDates">
+                        <div class="owl-item1" [class.active]="isActive(date)" (click)="onDateClick(date)">
+                            <h4 id="">{{date| date:"MMM d"}}</h4>
+                            <p class="m-0">{{date| date:"EEEE"}}</p>
+                        </div></ng-template>  
+                </owl-carousel-o>
+           </div>
+
+            <div class="booking-slots ">
+                  <div class="button-list">
+                    <button *ngFor="let slot of timeMap; let i = index" type="button" 
+                    class="btn slot-button" 
+                    (click)="onSlotClick(slot)" 
+                    [class.green]="slot === selectedSlot"
+                    [class.bookedWithThisDoctor]="isSlotBookedWithThisDoctor(selectedDate, i+1)"
+                    [class.bookedWithOtherDoctor]="isSlotBookedWithOtherDoctor(selectedDate, i+1)"
+                    [class.booked]="isSlotBooked(selectedDate, i+1)">{{slot}}</button>
+            </div>
+            <button type="submit" class=" btn btn-danger btn-book" [class.disabled]="isButtonDisabled() || doctorDetails == null" (click)="onBookClick()">Book</button>
+        </div>
+    </div>

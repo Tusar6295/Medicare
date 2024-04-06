@@ -1,0 +1,142 @@
+ .main-container{
+    width: 70%;
+    height: 80vh;
+    margin: 0 auto;
+    margin-top: 3rem;
+    display: flex;
+    gap: 2rem;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+
+.profile{
+    width: 25%;
+    border: 1px solid rgb(208, 205, 205);
+    height: 100%;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.booking{
+    width:75%;
+    border: 1px solid rgb(208, 205, 205);
+    height: 100%;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap:4%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.reviews{
+    border:1px solid rgb(208, 205, 205);
+    height: 25%;
+    padding: 0.8rem;
+    border-radius:0.5rem;
+    text-align: center;
+
+}
+
+/* .booking-carousel{
+    height: 20%;
+} */
+
+.booking-slots{
+    /* border:1px solid grey; */
+    height: 50%;
+}
+
+.feedback{
+    display: flex;
+    justify-content: center;
+}
+
+.arrow-button {
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.review-text{
+    width: 70%;
+    font-size: 1rem;
+}
+
+.carousel-container{
+    width: 100%;
+    height: auto;
+    position:relative;
+}
+
+.owl-item1{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    color: var(--main-color);
+    margin: 0;
+    cursor: pointer;
+}
+
+/* .owl-item1:hover{
+    border-bottom: 3px solid var(--button-color)
+} */
+
+.active{
+    background-color:var(--button-color) ;
+    color: white;
+    border-radius: 8px;
+}
+
+.green{
+    background-color:var(--button-color) ;
+    color: white;
+}
+
+#booking-title{
+    background-color: #198754;
+    color: white;
+    border-radius: 8px;
+    padding:0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.button-list{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+    justify-content: center;
+}
+
+.button-list button{
+    background-color: white;
+    border: 2px solid #c3e6cb;
+    color:#198754;
+    padding: 0.5rem 1rem;
+}
+
+.button-list button:hover{
+    border: 2px solid #53c590;
+    background-color: #53c590;
+    color: white;
+}
+
+.details{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.details img{
+    width: 80%;
+    border-radius: 50%;
+}
