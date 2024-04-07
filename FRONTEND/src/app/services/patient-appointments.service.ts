@@ -20,14 +20,10 @@ export class PatientAppointmentsService {
     return this.http.post<any>(`${this.baseUrl}/search/searchAppointments`, requestBody);
   }
 
-  // getAppointments(patientId: any, date: string, appStatus: string): Observable<any> {
-  //   const requestBody = {
-  //     patientId: patientId,
-  //     appDate: date,
-  //     appStatus: appStatus, 
-  //   };
-  //   return this.http.post<any>(`${this.baseUrl}/patient/getAppointments`, requestBody);
-  // }
+  getPatientAppointments(patientId: any, date: string): Observable<any> {
+    const status="PENDING"
+    return this.http.get<any>(`${this.baseUrl}/appointment/getPatientAppointments?patientId=${patientId}&appDate=${date}&appStatus=${status}`);
+  }
 
   getFeedbackByPatientId(patientId: any): Observable<any> {
     const params = new HttpParams().set('id', patientId);

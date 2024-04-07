@@ -20,4 +20,5 @@ public interface AppointmentMapper {
     @Mapping(target = "doctor", ignore = true)
     @Mapping(target = "patient", ignore = true)
     Appointment appointmentBookingRequestDTOToAppointment(AppointmentBookingRequestDTO appointmentBookingRequestDTO);
+
 }

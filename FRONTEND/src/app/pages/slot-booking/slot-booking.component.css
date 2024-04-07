@@ -129,16 +129,16 @@
 
 .button-list button{
     background-color: white;
-    border: 2px solid #c3e6cb;
+    border: 2px solid #198754 ;
     color:#198754;
     padding: 0.5rem 1rem;
 }
 
-/* .button-list button:hover{
-    border: 2px solid #53c590;
-    background-color: #53c590;
+.button-list button:hover{
+    border: 2px solid #198754;
+    background-color: #198754;
     color: white;
-} */
+}
 
 .details{
     display: flex;
@@ -151,13 +151,6 @@
     border-radius: 50%;
 }
 
-.bookedWithThisDoctor{
-    background-color: green;
-}
-
-.bookedWithAnotherDoctor{
-    background-color: yellow;
-}
 
 .booked{
     background-color: red;
@@ -167,6 +160,7 @@
     background-color:var(--button-color) ;
     color: white;
 } */
+
 .active{
     background-color:var(--button-color) ;
     color: white;
@@ -174,6 +168,25 @@
 }
 
 .button-list button.green{
-    background-color:var(--button-color) ;
+    background-color:#198754 ;
     color: white;
+    border: 2px solid #198754;
+}
+
+.booking-slots .button-list button.red{
+    background-color: rgba(255, 0, 0,0.8);
+    color: white;
+    border: 2px solid rgba(255, 0, 0,0.8);
+}
+
+.booking-slots .button-list button.lightGreen{
+    background-color: rgba(106, 188, 58, 0.8);
+    color: white;
+    border: 2px solid rgba(106, 188, 58, 0.8);
+}
+
+.booking-slots .button-list button.yellow{
+    background-color: rgba(194, 174, 60, 0.8);
+    color: white;
+    border: 2px solid rgba(194, 174, 60, 0.8);
 }

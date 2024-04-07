@@ -25,13 +25,9 @@ export class DoctorAppointmentsService {
     return this.http.post<any>(`${this.searchUrl}/searchAppointments`, requestBody);
   }
 
-  getAppointments(doctorId: any, date: string): Observable<any> {
-    const requestBody = {
-      appDate: date,
-      doctorId: doctorId,
-      appStatus: "PENDING", 
-    };
-    return this.http.post<any>(`${this.baseUrl}/appointment/getAppointments`, requestBody);
+  getAppointments(doctorId: number, date: string): Observable<any> {
+    const status = "PENDING";
+    return this.http.get<any>(`${this.baseUrl}/getDoctorAppointments?doctorId=${doctorId}&appDate=${date}&appStatus=${status}`);
   }
 
   getReviewsOfDoctor(doctorId: any, page: any, size: any): Observable<any> {
@@ -62,26 +58,14 @@ export class DoctorAppointmentsService {
       appDate: appDate,
       slot: slot
     };
-
     return this.http.post<any>(`${this.baseUrl}/book`, requestBody);
   }
 
   getUpcomingAppointments(doctorId: any): Observable<any[]> {
     return this.http.post<any>(`${this.searchUrl}/searchAppointments`, { doctorId });
   }
-
 }
 
-/* getCompletedAppointments(): any[] {
-   return [
-     { date: '22/10/2024', time: '12:00 PM', description: 'Completed Appointment 1', patient: 'Muskan Sharma' },
-     { date: '22/10/2024', time: '12:00 PM', description: 'Completed Appointment 2', patient: 'Aishwarya Gupta' },
-     { date: '22/10/2024', time: '12:00 PM', description: 'Completed Appointment 3', patient: 'Joe Roy' },
-     { date: '22/10/2024', time: '12:00 PM', description: 'Completed Appointment 4', patient: 'Akanksha Dwivedi' },
-     { date: '22/10/2024', time: '12:00 PM', description: 'Upcoming Appointment 1', patient: 'Jane Smith' },
-     { date: '22/10/2024', time: '12:20 PM', description: 'Upcoming Appointment 2', patient: 'Sakshi Saha' },
-     { date: '22/10/2024', time: '12:20 PM', description: 'Upcoming Appointment 3', patient: 'Giya Roy' }
-   ];
- } */
+
 
 

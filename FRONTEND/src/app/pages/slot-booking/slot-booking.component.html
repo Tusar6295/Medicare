@@ -40,9 +40,12 @@
                   <div class="button-list">
                     <button *ngFor="let slot of timeMap; let i = index" type="button" 
                     class="btn slot-button" 
-                    (click)="onSlotClick(slot)" 
-                    [ngClass]="{'green': selectedSlot === slot}"
-                    [disabled]="selectedDate == ''"
+                    (click)="onSlotClick(slot,i+1)" 
+                    [class.green]="selectedSlot === slot"
+                    [class.lightGreen]="isSlotBookedByCurrentPatient(i+1)"
+                    [class.red]="isSlotBookedByOtherPatient(i+1)"
+                    [class.yellow]="isSlotBookedWithOtherDoctor(i+1)"
+                    [disabled]="selectedDate == '' || isSlotDisabled(i+1)"
                     >{{slot}}</button>
             </div>
             <button type="submit" class=" btn btn-danger btn-book">Book</button>

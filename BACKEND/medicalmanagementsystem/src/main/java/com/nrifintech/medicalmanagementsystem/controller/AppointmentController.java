@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nrifintech.medicalmanagementsystem.dto.AppointmentBookingRequestDTO;
 import com.nrifintech.medicalmanagementsystem.dto.AppointmentSearchRequestDTO;
+import com.nrifintech.medicalmanagementsystem.dto.AppointmentResponseDTO;
 import com.nrifintech.medicalmanagementsystem.model.Appointment;
 import com.nrifintech.medicalmanagementsystem.service.AppointmentService;
 import com.nrifintech.medicalmanagementsystem.service.FeedbackService;
@@ -66,28 +67,27 @@ public class AppointmentController {
                 appointmentService.cancelAppointment(id));
     }
     
-    @PostMapping("/getAppointments")
-    public ResponseEntity<Object> getAppointmentsOfDoctor(
-        @RequestParam Long doctorId, 
-        @RequestParam AppointmentStatus appStatus,
-        @RequestParam LocalDate appDate){
-            return generateResponseService.generateResponse(
-                "Appointment fetched successfully",
-                HttpStatus.OK,
-                appointmentService.getAppointmentsOfDoctor(doctorId,appStatus,appDate));
-        }
-    // @PostMapping("/searchAppointments")
-    // public ResponseEntity<Object> searchAppointments(@Valid @RequestBody AppointmentSearchRequestDTO appointmentSearchRequestDTO)
-    // {
-    //     System.out.println("sdsdsdsdsd22222222");
-    //     System.out.println("Request data = ");
-    //     System.out.println(appointmentSearchRequestDTO);
-    //     return generateResponseService.generateResponse(
-    //         "Appointment List fetched",
-    //         HttpStatus.OK,
-    //         appointmentService.searchAppointments(appointmentSearchRequestDTO));
-    // }
+    @GetMapping("/getDoctorAppointments")
+    public ResponseEntity<Object> getAppointments(
+            @RequestParam Long doctorId,
+            @RequestParam LocalDate appDate,
+            @RequestParam AppointmentStatus appStatus) {
 
-   
+        return generateResponseService.generateResponse(
+            "Appointment successfully fetched",
+            HttpStatus.OK,
+            appointmentService.findAppointments(doctorId, appDate, appStatus));
+    }
 
+    @GetMapping("/getPatientAppointments")
+    public ResponseEntity<Object> getPatientAppointments(
+            @RequestParam Long patientId,
+            @RequestParam LocalDate appDate,
+            @RequestParam AppointmentStatus appStatus) {
+
+        return generateResponseService.generateResponse(
+            "Appointment successfully fetched",
+            HttpStatus.OK,
+            appointmentService.findPatientAppointments(patientId, appDate, appStatus));
+    }
 }

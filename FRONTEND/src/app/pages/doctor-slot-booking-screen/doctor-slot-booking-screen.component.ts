@@ -174,9 +174,6 @@ export class DoctorSlotBookingScreenComponent {
         })
       // Use the id to fetch associated data or perform any other logic
     });
-
-
-
   }
 
 

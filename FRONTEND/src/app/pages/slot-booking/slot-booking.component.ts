@@ -25,8 +25,14 @@ export class SlotBookingComponent implements OnInit {
     '16:00 to 16:15', '16:15 to 16:30', '16:30 to 16:45', '16:45 to 17:00'
   ];
 
-  slotMap: { [key: string]: boolean } = {};
-  appointments: Appointment[] = [];
+  // slotMap: { [key: string]: boolean } = {};
+  doctorAppointments: Appointment[] = [];
+  patientAppointments: Appointment[] = [];
+  // appointmentMap: {[key: string]:boolean} ={};
+  otherPatientBookedSlots: {[key: string]:boolean} ={}
+  currentPatientBookedSlots: {[key: string]:boolean} ={};
+  bookedWithOtherDoctor: {[key: string]:boolean} ={};
+
   selectedDate: string = "";
   selectedSlot: string = "";
   slots: string[] = [];
@@ -56,7 +62,6 @@ export class SlotBookingComponent implements OnInit {
   }
 
   availableDates: Date[] = [];
-  isActiveSlot: boolean = false;
 
   ngOnInit(): void {
     this.generateDates();
@@ -75,11 +80,7 @@ export class SlotBookingComponent implements OnInit {
           console.log("Error in fetching doctor details", err);
         }
       })
-
-     
     });
-
-
 
     this.selectedDate = "";
     this.selectedSlot = "";
@@ -109,14 +110,56 @@ export class SlotBookingComponent implements OnInit {
     this.selectedDate = formattedDate;
     this.selectedSlot = "";
     console.log("selected date:", this.selectedDate)
-    console.log("selected date:", this.selectedDate)
-    console.log("selected date:", this.selectedDate)
 
     this.doctorAppointmentsService.getAppointments(
       this.doctorDetails.id,this.selectedDate).subscribe({
         next: (data) => {
           console.log("Appointments of doctor for date: " + this.selectedDate , data);
+          this.doctorAppointments = data.cookies;
+          console.log(this.doctorAppointments);
+
+          this.otherPatientBookedSlots = {};
+          this.currentPatientBookedSlots = {};
+
+          this.doctorAppointments.forEach(appointment => {
+            const key = appointment.slot;
+            if (appointment.patientId !== parseInt(localStorage.getItem("patientId")?? '')) {
+                this.otherPatientBookedSlots[key] = true;
+            } else {
+                this.currentPatientBookedSlots[key] = true;
+            }
+        });
+        console.log("Other patient booked slots:", this.otherPatientBookedSlots);
+        console.log("Current patient booked slots:", this.currentPatientBookedSlots);
+        },
+        error: (err: HttpErrorResponse) => {
+          console.log("error", err);
         }
+    })
+
+    this.patientAppointmentsService.getPatientAppointments(
+      localStorage.getItem("patientId"),
+      this.selectedDate,
+    ).subscribe({
+      next: (data: any) => {
+        console.log(data.cookies);
+        this.bookedWithOtherDoctor = {};
+        this.patientAppointments = data.cookies;
+        this.patientAppointments.forEach(patientAppointment=>{
+          const key = patientAppointment.slot;
+          
+          console.log(this.doctorDetails.id + "," +patientAppointment.doctorId)
+          if(this.doctorDetails.id !== patientAppointment.doctorId){
+            this.bookedWithOtherDoctor[key] = true;
+          }
+
+          console.log("Booked other doctorslots:", this.bookedWithOtherDoctor);
+        }
+        )
+      },
+      error: (err: HttpErrorResponse) => {
+        console.log("Error", err);
+      }
     })
   }
 
@@ -129,12 +172,18 @@ export class SlotBookingComponent implements OnInit {
     return this.selectedDate == formattedDate;
   }
 
-  onSlotClick(slot: string) {
-    this.isActiveSlot == true;
+  onSlotClick(slot: string,i:number) {
     this.selectedSlot = slot;
-
+    console.log("property", this.otherPatientBookedSlots.hasOwnProperty(i));
+    console.log("property1", this.bookedWithOtherDoctor.hasOwnProperty(i));
     console.log("SLOT CLICKED!" + this.selectedSlot)
-    // alert('Selected slot:');
+
+  }
+
+  isSlotDisabled(slot: number): boolean {
+    return this.otherPatientBookedSlots.hasOwnProperty(slot) || 
+    this.currentPatientBookedSlots.hasOwnProperty(slot) ||
+    this.bookedWithOtherDoctor.hasOwnProperty(slot);
   }
 
   loadReviews() {
@@ -148,6 +197,18 @@ export class SlotBookingComponent implements OnInit {
         console.log("Error in fetching reviews", err);
       }
     })
+  }
+
+  isSlotBookedByCurrentPatient(slot: number){
+    return this.currentPatientBookedSlots.hasOwnProperty(slot);
+  }
+
+  isSlotBookedByOtherPatient(slot: number){
+    return this.otherPatientBookedSlots.hasOwnProperty(slot);
+  }
+
+  isSlotBookedWithOtherDoctor(slot: number){
+    return this.bookedWithOtherDoctor.hasOwnProperty(slot);
   }
 
   customOptions: OwlOptions = {

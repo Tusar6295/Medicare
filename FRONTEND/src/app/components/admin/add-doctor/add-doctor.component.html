@@ -97,15 +97,11 @@
             [(ngModel)]="doctor.fees" formControlName="fee"/>
         </div>
 
-        <div class="form-group">
-          <!-- <label for="profile-img" class="form-label">Profile Photo</label>
-          <input class="form-control" name="profile-img" type="file" id="profile-img"/> -->
           <div class="form-group">
             <label for="profile-img" class="form-label">Profile Photo (Max size: 2 MB)</label>
             <input class="form-control" name="profile-img" type="file" id="profile-img" (change)="onFileSelected($event,0)" accept="image/*"/>
             <div *ngIf="fileSizeError[0]" class="text-danger">File size exceeds the limit (2 MB).</div>
           </div>
-        </div>
 
         <button id="submit" type="submit" class="btn btn-primary" [disabled]="!addDoctorForm.valid || isSubmitDisabled[0]">
           Submit

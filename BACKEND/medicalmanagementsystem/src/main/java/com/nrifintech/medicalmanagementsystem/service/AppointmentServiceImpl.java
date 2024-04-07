@@ -39,6 +39,7 @@ import com.nrifintech.medicalmanagementsystem.dto.AppointmentBookingRequestDTO;
 import com.nrifintech.medicalmanagementsystem.dto.AppointmentBookingResponseDTO;
 import com.nrifintech.medicalmanagementsystem.dto.AppointmentSearchRequestDTO;
 import com.nrifintech.medicalmanagementsystem.dto.AppointmentSearchResponseDTO;
+import com.nrifintech.medicalmanagementsystem.dto.AppointmentResponseDTO;
 import com.nrifintech.medicalmanagementsystem.dto.DoctorDTO;
 import com.nrifintech.medicalmanagementsystem.event.EmailSendingEvent;
 import com.nrifintech.medicalmanagementsystem.mapper.AppointmentMapper;
@@ -132,22 +133,22 @@ public class AppointmentServiceImpl implements AppointmentService {
                                                 "Cannot book consecutive appointments with this doctor on this day");
                         }
                 }
-                
-                        appointmentSearchRequestDTO = new AppointmentSearchRequestDTO();
-                        appointmentSearchRequestDTO.setStartDate(appointmentBookingRequestDTO.getAppDate());
-                        appointmentSearchRequestDTO.setEndDate(appointmentBookingRequestDTO.getAppDate());
-                        appointmentSearchRequestDTO.setPatientId(appointmentBookingRequestDTO.getPatientId());
-                        appointmentSearchRequestDTO.setSlot(appointmentBookingRequestDTO.getSlot());
-                        appointmentSearchRequestDTO.setAppointmentStatus("PENDING");
 
-                        List<AppointmentSearchResponseDTO> samePatientBookings = (searchAppointments(
-                                        appointmentSearchRequestDTO)).getContent();
+                appointmentSearchRequestDTO = new AppointmentSearchRequestDTO();
+                appointmentSearchRequestDTO.setStartDate(appointmentBookingRequestDTO.getAppDate());
+                appointmentSearchRequestDTO.setEndDate(appointmentBookingRequestDTO.getAppDate());
+                appointmentSearchRequestDTO.setPatientId(appointmentBookingRequestDTO.getPatientId());
+                appointmentSearchRequestDTO.setSlot(appointmentBookingRequestDTO.getSlot());
+                appointmentSearchRequestDTO.setAppointmentStatus("PENDING");
 
-                        if (samePatientBookings.size() > 0) {
-                                throw new NoSameBookingsWithSameDoctorByOnePatient(
-                                                "Cannot book appointments with multiple doctors on same day and on same slot");
-                        }
-                
+                List<AppointmentSearchResponseDTO> samePatientBookings = (searchAppointments(
+                                appointmentSearchRequestDTO)).getContent();
+
+                if (samePatientBookings.size() > 0) {
+                        throw new NoSameBookingsWithSameDoctorByOnePatient(
+                                        "Cannot book appointments with multiple doctors on same day and on same slot");
+                }
+
                 Appointment appointment;
                 appointment = new Appointment();
                 Doctor doctor = (doctorService.getActiveDoctorById(appointmentBookingRequestDTO.getDoctorId())).get();
@@ -168,20 +169,25 @@ public class AppointmentServiceImpl implements AppointmentService {
                 appointmentBookingResponseDTO.setDoctorId(appointment.getDoctor().getId());
                 appointmentBookingResponseDTO.setPatientId(appointment.getPatient().getId());
 
-                // String emailMessage = "Dear " + appointment.getPatient().getName() + ",\n\n" +
-                //                 "We hope this message finds you well.\n\n" +
-                //                 "We want to inform you that your appointment scheduled for " + appointment.getAppDate()
-                //                 + " at "
-                //                 + slotTimeMapper.getTimeFromSlot(appointment.getSlot())
-                //                 + " has been successfully booked in our medical management system.\n\n" +
-                //                 "If you have any further questions or need assistance, please feel free to contact our office.\n\n"
-                //                 +
-                //                 "Thank you.\n\n" +
-                //                 "Best regards,\n" +
-                //                 "[Your Medical Management System Team]";
+                // String emailMessage = "Dear " + appointment.getPatient().getName() + ",\n\n"
+                // +
+                // "We hope this message finds you well.\n\n" +
+                // "We want to inform you that your appointment scheduled for " +
+                // appointment.getAppDate()
+                // + " at "
+                // + slotTimeMapper.getTimeFromSlot(appointment.getSlot())
+                // + " has been successfully booked in our medical management system.\n\n" +
+                // "If you have any further questions or need assistance, please feel free to
+                // contact our office.\n\n"
+                // +
+                // "Thank you.\n\n" +
+                // "Best regards,\n" +
+                // "[Your Medical Management System Team]";
 
-                                EmailSendingEvent event = new EmailSendingEvent(this, appointment.getPatient().getEmail(),
-                                appointment.getAppDate().toString(),slotTimeMapper.getTimeFromSlot(appointment.getSlot()),appointment.getPatient().getName());
+                EmailSendingEvent event = new EmailSendingEvent(this, appointment.getPatient().getEmail(),
+                                appointment.getAppDate().toString(),
+                                slotTimeMapper.getTimeFromSlot(appointment.getSlot()),
+                                appointment.getPatient().getName());
 
                 // event.setRecipient(appointment.getPatient().getEmail())
                 // event.setSubject("APPOINTMENT BOOKING CONFIRMATION")
@@ -201,20 +207,10 @@ public class AppointmentServiceImpl implements AppointmentService {
 
                 appointment.setAppStatus(AppointmentStatus.CANCELLED);
                 appointment = appointmentRepository.save(appointment);
-
-                // String emailMessage = "Dear " + appointment.getPatient().getName() + ",\n\n" +
-                //                 "We hope this message finds you well.\n\n" +
-                //                 "We want to inform you that your appointment scheduled for " + appointment.getAppDate()
-                //                 + " at "
-                //                 + slotTimeMapper.getTimeFromSlot(appointment.getSlot())
-                //                 + " has been successfully cancelled in our medical management system.\n\n" +
-                //                 "If you have any further questions or need assistance, please feel free to contact our office.\n\n"
-                //                 +
-                //                 "Thank you for your patience.\n\n" +
-                //                 "Best regards,\n" +
-                //                 "[Your Medical Management System Team]";
                 EmailSendingEvent event = new EmailSendingEvent(this, appointment.getPatient().getEmail(),
-                                appointment.getAppDate().toString(),slotTimeMapper.getTimeFromSlot(appointment.getSlot()),appointment.getPatient().getName());
+                                appointment.getAppDate().toString(),
+                                slotTimeMapper.getTimeFromSlot(appointment.getSlot()),
+                                appointment.getPatient().getName());
 
                 eventPublisher.publishEvent(event);
 
@@ -227,6 +223,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 return appointmentRepository.findById(appointmentId).get();
         }
 
+        @Override
         public Page<AppointmentSearchResponseDTO> searchAppointments(
                         AppointmentSearchRequestDTO appointmentSearchRequestDTO) {
                 Pageable pageable;
@@ -288,17 +285,26 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         @Transactional
         public void updateAppointmentStatus() {
-                System.out.println(LocalDateTime.now().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")).toString());
-                System.out.println(slotTimeMapper.getSlotFromTime(LocalDateTime.now().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")).toString()));
-                appointmentRepository.updateAppointmentStatus(LocalDate.now(),slotTimeMapper.getSlotFromTime(LocalDateTime.now().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")).toString()));
+                System.out.println(LocalDateTime.now().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"))
+                                .toString());
+                System.out.println(slotTimeMapper.getSlotFromTime(LocalDateTime.now().toLocalTime()
+                                .format(DateTimeFormatter.ofPattern("HH:mm")).toString()));
+                appointmentRepository.updateAppointmentStatus(LocalDate.now(),
+                                slotTimeMapper.getSlotFromTime(LocalDateTime.now().toLocalTime()
+                                                .format(DateTimeFormatter.ofPattern("HH:mm")).toString()));
         }
 
-        @Override
-        public List<AppointmentSearchResponseDTO> getAppointmentsOfDoctor(Long doctorId,AppointmentStatus appStatus,LocalDate appDate)
-        {
-                List<AppointmentSearchResponseDTO> doctorAppointments = appointmentRepository.findAppointmentsOfDoctors(appDate,doctorId,appStatus);
-                return doctorAppointments;
-        }
-       
+        public List<AppointmentResponseDTO> findAppointments(Long doctorId, LocalDate appDate,
+                        AppointmentStatus appStatus) {
 
+                LocalDate endDate = appDate.plusDays(1);
+                return appointmentRepository.findDoctorAppointments(doctorId, appDate, endDate, appStatus);
+        }
+
+        public List<AppointmentResponseDTO> findPatientAppointments(Long patientId, LocalDate appDate,
+                        AppointmentStatus appStatus) {
+
+                LocalDate endDate = appDate.plusDays(1);
+                return appointmentRepository.findPatientAppointments(patientId, appDate, endDate, appStatus);
+        }
 }

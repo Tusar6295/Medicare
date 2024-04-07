@@ -16,6 +16,7 @@ import com.nrifintech.medicalmanagementsystem.dto.AppointmentBookingResponseDTO;
 import com.nrifintech.medicalmanagementsystem.dto.AppointmentSearchRequestDTO;
 import com.nrifintech.medicalmanagementsystem.dto.AppointmentSearchResponseDTO;
 import com.nrifintech.medicalmanagementsystem.dto.DashboardDataDTO;
+import com.nrifintech.medicalmanagementsystem.dto.AppointmentResponseDTO;
 import com.nrifintech.medicalmanagementsystem.model.Appointment;
 import com.nrifintech.medicalmanagementsystem.utility.enums.AppointmentStatus;
 
@@ -32,6 +33,8 @@ public interface AppointmentService {
     public Page<AppointmentSearchResponseDTO> searchAppointments(AppointmentSearchRequestDTO appointmentSearchRequestDTO);
     public void updateAppointmentStatus();
 
-    public List<AppointmentSearchResponseDTO> getAppointmentsOfDoctor(Long doctorId, AppointmentStatus appStatus, LocalDate appDate);
+    public List<AppointmentResponseDTO> findAppointments(Long doctorId, LocalDate appDate, AppointmentStatus appStatus);
+    public List<AppointmentResponseDTO> findPatientAppointments(Long patientId, LocalDate appDate, AppointmentStatus appStatus);
+
     
 }
