@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
@@ -12,7 +12,7 @@ type StringPair = [string, string];
 @Component({
   selector: 'app-slot-booking',
   templateUrl: './slot-booking.component.html',
-  styleUrls: ['./slot-booking.component.css']
+  styleUrls: ['./slot-booking.component.css'],
 })
 export class SlotBookingComponent implements OnInit {
 
@@ -29,9 +29,9 @@ export class SlotBookingComponent implements OnInit {
   doctorAppointments: Appointment[] = [];
   patientAppointments: Appointment[] = [];
   // appointmentMap: {[key: string]:boolean} ={};
-  otherPatientBookedSlots: {[key: string]:boolean} ={}
-  currentPatientBookedSlots: {[key: string]:boolean} ={};
-  bookedWithOtherDoctor: {[key: string]:boolean} ={};
+  otherPatientBookedSlots: { [key: string]: boolean } = {}
+  currentPatientBookedSlots: { [key: string]: boolean } = {};
+  bookedWithOtherDoctor: { [key: string]: boolean } = {};
 
   selectedDate: string = "";
   selectedSlot: string = "";
@@ -112,9 +112,9 @@ export class SlotBookingComponent implements OnInit {
     console.log("selected date:", this.selectedDate)
 
     this.doctorAppointmentsService.getAppointments(
-      this.doctorDetails.id,this.selectedDate).subscribe({
+      this.doctorDetails.id, this.selectedDate).subscribe({
         next: (data) => {
-          console.log("Appointments of doctor for date: " + this.selectedDate , data);
+          console.log("Appointments of doctor for date: " + this.selectedDate, data);
           this.doctorAppointments = data.cookies;
           console.log(this.doctorAppointments);
 
@@ -123,19 +123,19 @@ export class SlotBookingComponent implements OnInit {
 
           this.doctorAppointments.forEach(appointment => {
             const key = appointment.slot;
-            if (appointment.patientId !== parseInt(localStorage.getItem("patientId")?? '')) {
-                this.otherPatientBookedSlots[key] = true;
+            if (appointment.patientId !== parseInt(localStorage.getItem("patientId") ?? '')) {
+              this.otherPatientBookedSlots[key] = true;
             } else {
-                this.currentPatientBookedSlots[key] = true;
+              this.currentPatientBookedSlots[key] = true;
             }
-        });
-        console.log("Other patient booked slots:", this.otherPatientBookedSlots);
-        console.log("Current patient booked slots:", this.currentPatientBookedSlots);
+          });
+          console.log("Other patient booked slots:", this.otherPatientBookedSlots);
+          console.log("Current patient booked slots:", this.currentPatientBookedSlots);
         },
         error: (err: HttpErrorResponse) => {
           console.log("error", err);
         }
-    })
+      })
 
     this.patientAppointmentsService.getPatientAppointments(
       localStorage.getItem("patientId"),
@@ -145,11 +145,11 @@ export class SlotBookingComponent implements OnInit {
         console.log(data.cookies);
         this.bookedWithOtherDoctor = {};
         this.patientAppointments = data.cookies;
-        this.patientAppointments.forEach(patientAppointment=>{
+        this.patientAppointments.forEach(patientAppointment => {
           const key = patientAppointment.slot;
-          
-          console.log(this.doctorDetails.id + "," +patientAppointment.doctorId)
-          if(this.doctorDetails.id !== patientAppointment.doctorId){
+
+          console.log(this.doctorDetails.id + "," + patientAppointment.doctorId)
+          if (this.doctorDetails.id !== patientAppointment.doctorId) {
             this.bookedWithOtherDoctor[key] = true;
           }
 
@@ -172,7 +172,7 @@ export class SlotBookingComponent implements OnInit {
     return this.selectedDate == formattedDate;
   }
 
-  onSlotClick(slot: string,i:number) {
+  onSlotClick(slot: string, i: number) {
     this.selectedSlot = slot;
     console.log("property", this.otherPatientBookedSlots.hasOwnProperty(i));
     console.log("property1", this.bookedWithOtherDoctor.hasOwnProperty(i));
@@ -181,9 +181,9 @@ export class SlotBookingComponent implements OnInit {
   }
 
   isSlotDisabled(slot: number): boolean {
-    return this.otherPatientBookedSlots.hasOwnProperty(slot) || 
-    this.currentPatientBookedSlots.hasOwnProperty(slot) ||
-    this.bookedWithOtherDoctor.hasOwnProperty(slot);
+    return this.otherPatientBookedSlots.hasOwnProperty(slot) ||
+      this.currentPatientBookedSlots.hasOwnProperty(slot) ||
+      this.bookedWithOtherDoctor.hasOwnProperty(slot);
   }
 
   loadReviews() {
@@ -199,17 +199,70 @@ export class SlotBookingComponent implements OnInit {
     })
   }
 
-  isSlotBookedByCurrentPatient(slot: number){
+  onBookClick(): void {
+    console.log("BOOKED")
+    const dialogRef = this.dialog.open(BookModalComponent, {
+      width: '400px', // Set the width of the modal
+      data: {
+        isType: 1,
+        message: "Booking slot",
+        selectedDate: this.selectedDate,
+        selectedSlot: this.selectedSlot
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log(result);
+
+      if (this.selectedSlot !== null) {
+        let index = this.timeMap.indexOf(this.selectedSlot) + 1;
+
+        if (result.result == true) {
+          console.log("Inside")
+          this.doctorAppointmentsService.bookDoctorAppointment(this.doctorDetails?.id, localStorage.getItem("patientId"), this.selectedDate, index)
+            .subscribe((response) => {
+              // console.log(response);
+              const dialogRef = this.dialog.open(BookModalComponent, {
+                width: '400px', // Set the width of the modal
+                data: {
+                  isType: 2,
+                  message: "Successfully Booked",
+                  selectedDate: this.selectedDate,
+                  selectedSlot: this.selectedSlot
+                }
+              })
+
+            },
+              (error) => {
+                console.log(error);
+                const dialogRef = this.dialog.open(BookModalComponent, {
+                  width: '400px', // Set the width of the modal
+                  data: {
+                    isType: 3,
+                    message: error.error.message,
+                    selectedDate: this.selectedDate,
+                    selectedSlot: this.selectedSlot
+                  }
+                });
+              })
+        }
+      }
+    });
+  }
+
+  isSlotBookedByCurrentPatient(slot: number) {
     return this.currentPatientBookedSlots.hasOwnProperty(slot);
   }
 
-  isSlotBookedByOtherPatient(slot: number){
+  isSlotBookedByOtherPatient(slot: number) {
     return this.otherPatientBookedSlots.hasOwnProperty(slot);
   }
 
-  isSlotBookedWithOtherDoctor(slot: number){
+  isSlotBookedWithOtherDoctor(slot: number) {
     return this.bookedWithOtherDoctor.hasOwnProperty(slot);
   }
+
+ 
 
   customOptions: OwlOptions = {
     loop: false,
@@ -244,8 +297,8 @@ export class SlotBookingComponent implements OnInit {
     dots: false,
     navSpeed: 700,
     navText: ['<i class="fa-solid fa-angle-left fa-2x"></i>', '<i class="fa-solid fa-angle-right fa-2x"></i>'],
-    autoplay: true, 
-    autoplayTimeout: 5000, 
+    autoplay: true,
+    autoplayTimeout: 5000,
     autoplaySpeed: 1000,
     autoplayHoverPause: true,
     responsive: {

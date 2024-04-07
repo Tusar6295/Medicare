@@ -2,9 +2,11 @@
     background-color:#198754;
     color:white;
     border:1px solid white;
-    padding:4px 10px 4px 10px;
+    padding:0.3rem 1.5rem;
     border-radius:6px;
     margin: 4px 10px 4px 10px;
+    transition: transform 0.3s ease;
+    cursor:pointer;
 }
 
 #cancel-button{
@@ -12,8 +14,5 @@
 }
 
 .confirm-button:hover {
-    color: white;
-    cursor: pointer;
     transform: scale(1.1);
-    transition: all 1s ease;
 }

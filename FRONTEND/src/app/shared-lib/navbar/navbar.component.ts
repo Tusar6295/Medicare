@@ -9,21 +9,18 @@ import { AppearanceAnimation, ConfirmBoxEvokeService, ConfirmBoxInitializer, Dia
 })
 export class NavbarComponent {
 
+  newConfirmBox = new ConfirmBoxInitializer();
+
   constructor(public loginService: LoginService,
     private toast: NgToastService,
     private confirmLogout: ConfirmBoxEvokeService){
-  }
+     
 
-  currentUser: any = localStorage?.getItem('username');
-
-  confirm(){
-    const newConfirmBox = new ConfirmBoxInitializer();
-
-    newConfirmBox.setTitle('Logout');
-    newConfirmBox.setMessage('Are you sure you want to logout?');
+    this.newConfirmBox.setTitle('Logout');
+    this.newConfirmBox.setMessage('Are you sure you want to logout?');
 
 
-    newConfirmBox.setConfig({
+    this.newConfirmBox.setConfig({
     layoutType: DialogLayoutDisplay.WARNING, 
     animationIn: AppearanceAnimation.BOUNCE_IN, 
     animationOut: DisappearanceAnimation.BOUNCE_OUT, 
@@ -32,8 +29,13 @@ export class NavbarComponent {
     width: '400px', 
     });
 
-    newConfirmBox.setButtonLabels('Yes', 'No');
-    newConfirmBox.openConfirmBox$().subscribe(resp => {
+    this.newConfirmBox.setButtonLabels('Yes', 'No');
+  }
+
+  currentUser: any = localStorage?.getItem('username');
+
+  confirm(){
+    this.newConfirmBox.openConfirmBox$().subscribe(resp => {
       if(resp.clickedButtonID == "yes"){
       this.logout();
       }
@@ -42,6 +44,8 @@ export class NavbarComponent {
 
   logout(){
     this.loginService.logout();
-    this.toast.success({detail:"Log out successfull",summary:'success',duration:3000});
+    setTimeout(() => {
+      this.toast.success({detail:"Log out successful", summary:'success', duration:2000});
+  }, 500);
   }
 }

@@ -1,17 +1,14 @@
 .confirm-button {
-    background-color:#1b1b1b;
-    color:#787a7a;
-    border:1px solid #787a7a;
-    padding:4px 10px 4px 10px;
-    border-radius:10px;
+    background-color:#198754;
+    color:white;
+    border:1px solid white;
+    padding:0.3rem 1.5rem;
+    border-radius:6px;
     margin: 4px 10px 4px 10px;
+    transition: transform 0.3s ease;
+    cursor:pointer;
 }
 
-
 .confirm-button:hover {
-    background-color: rgb(27, 240, 116);
-    color: white;
-    cursor: pointer;
-    transform: scale(1.03);
-    transition: all 1s ease;
+    transform: scale(1.1);
 }

@@ -1,9 +1,9 @@
 <div *ngIf="data.isError == 2">
     <h2 mat-dialog-title>Cancelling appointment: {{data.selectedDate}} at {{data.selectedSlot}}</h2>
-    <mat-dialog-content>Are you sure</mat-dialog-content>
+    <mat-dialog-content>Are you sure?</mat-dialog-content>
     <mat-dialog-actions>
         <button class="confirm-button" (click)="closeModal(true)">YES</button>
-        <button class="confirm-button" (click)="closeModal(false)">NO</button>
+        <button id="cancel-button" class="confirm-button" (click)="closeModal(false)">NO</button>
     </mat-dialog-actions>
     </div>
     <div *ngIf="data.isError == 1">
