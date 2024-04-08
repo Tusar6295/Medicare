@@ -1,5 +1,16 @@
-<!-- <app-home-screen></app-home-screen> -->
-<!-- <app-admin-dashboard></app-admin-dashboard> -->
-<ngx-ui-loader fgsColor="#41BD81" pbColor="#41BD81"></ngx-ui-loader>
+
+<div style="position: relative">
+    <ngx-ui-loader [loaderId]="'loader-01'"
+    fgsColor="#41BD81"
+    fgsPosition="bottom-right"
+    pbColor="#41BD81"
+    fgsType="three-strings"
+    [fgsSize]="70"
+    bgsColor="#41BD81"
+    bgsPosition="bottom-right"
+    [pbThickness]= "5"
+    ></ngx-ui-loader>
+  </div>
+<ngx-ui-loader [loaderId]="'master'" fgsColor="#41BD81" pbColor="#41BD81"></ngx-ui-loader>
 <router-outlet></router-outlet>
 <ng-toast [style]="{width:'300px', height: '70px', marginTop: '100px'}"></ng-toast>
