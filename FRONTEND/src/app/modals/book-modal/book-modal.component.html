@@ -6,10 +6,14 @@
     </mat-dialog-actions>
     </div>
     <div *ngIf="data.isType == 1">
-    <h2 mat-dialog-title class="text-center">MEDICARE CLINIC</h2>
-    <mat-dialog-content class="fw-medium text-dark pt-0 pb-0">Booking slot: {{data.selectedSlot}}</mat-dialog-content>
-    <mat-dialog-content class="fw-medium text-dark pt-0 pb-0">Date: {{data.selectedDate}}</mat-dialog-content>
-    <mat-dialog-content >Are you sure?</mat-dialog-content>
+    <h4 class="text-center p-3" style="color:white;background-color: var(--secondary-color);">Appointment Summary</h4>
+    <h5 class="text-center m-3 fw-bold" style="color:var(--main-color);">MEDICARE CLINIC</h5>
+    <hr class= "border-secondary mt-0 mb-4" >
+    <mat-dialog-content class="fw-medium text-dark pt-0 pb-0 mb-2"><span class="fw-bolder">Booking slot:</span> {{data.selectedSlot}}</mat-dialog-content>
+    <mat-dialog-content class="fw-medium text-dark pt-0 pb-0 mb-2"><span class="fw-bolder">Date:</span> {{data.selectedDate}}</mat-dialog-content>
+    <mat-dialog-content class="fw-medium text-dark pt-0 pb-0 mb-4"><span class="fw-bolder">Consultant:</span> Dr. {{data.doctor}}</mat-dialog-content>
+    <!-- <mat-dialog-content style="color: rgb(60, 60, 60)">Are you sure?</mat-dialog-content> -->
+    <hr class="border-secondary m-0">
     <mat-dialog-actions>
         <button class="confirm-button" (click)="closeModal(true)">Book</button>
         <button id="cancel-button" class="confirm-button" (click)="closeModal(false)">Cancel</button>

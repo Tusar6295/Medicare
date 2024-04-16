@@ -219,7 +219,8 @@ export class SlotBookingComponent implements OnInit {
         isType: 1,
         message: "Booking slot",
         selectedDate:  this.formatDate(this.selectedDate),
-        selectedSlot: this.selectedSlot
+        selectedSlot: this.selectedSlot,
+        doctor: this.doctorDetails.name
       },
       backdropClass: 'backdropBackground'
     });
