@@ -75,6 +75,7 @@ export class SlotBookingComponent implements OnInit {
           console.log("doctor fetched", data);
           console.log("doctor fetched", this.doctorDetails);
           this.loadReviews();
+          this.onDateClick(this.availableDates[0]);
         },
         error: (err: HttpErrorResponse) => {
           console.log("Error in fetching doctor details", err);
@@ -84,6 +85,7 @@ export class SlotBookingComponent implements OnInit {
 
     this.selectedDate = "";
     this.selectedSlot = "";
+    
   }
 
   generateDates() {
@@ -102,6 +104,7 @@ export class SlotBookingComponent implements OnInit {
   }
 
   onDateClick(date: Date) {
+    console.log("helooooo",date);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -109,8 +112,8 @@ export class SlotBookingComponent implements OnInit {
     const formattedDate = `${year}-${month}-${day}`;
     this.selectedDate = formattedDate;
     this.selectedSlot = "";
-    console.log("selected date:", this.selectedDate)
-
+    console.log("selected date helooooooo:", this.selectedDate)
+    console.log("doctorid hellooo", this.doctorDetails.id)
     this.doctorAppointmentsService.getAppointments(
       this.doctorDetails.id, this.selectedDate).subscribe({
         next: (data) => {
@@ -174,9 +177,6 @@ export class SlotBookingComponent implements OnInit {
 
   onSlotClick(slot: string, i: number) {
     this.selectedSlot = slot;
-    console.log("property", this.otherPatientBookedSlots.hasOwnProperty(i));
-    console.log("property1", this.bookedWithOtherDoctor.hasOwnProperty(i));
-    console.log("SLOT CLICKED!" + this.selectedSlot)
 
   }
 
@@ -199,16 +199,29 @@ export class SlotBookingComponent implements OnInit {
     })
   }
 
+  formatDate(date: string): string {
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'long',
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    };
+  
+    const formattedDate = new Date(date).toLocaleDateString('en-US', options);
+    return formattedDate;
+  }
+
   onBookClick(): void {
     console.log("BOOKED")
     const dialogRef = this.dialog.open(BookModalComponent, {
-      width: '400px', // Set the width of the modal
+      width: '400px',
       data: {
         isType: 1,
         message: "Booking slot",
-        selectedDate: this.selectedDate,
+        selectedDate:  this.formatDate(this.selectedDate),
         selectedSlot: this.selectedSlot
-      }
+      },
+      backdropClass: 'backdropBackground'
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {

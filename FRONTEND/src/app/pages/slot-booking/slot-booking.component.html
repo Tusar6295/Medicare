@@ -3,19 +3,26 @@
         <div class="profile ">
             <div class="details">
                 <img *ngIf="doctorDetails.profileImgUrl" [src]="doctorDetails.profileImgUrl" alt="">
-                <img *ngIf="!doctorDetails.profileImgUrl" src="/assets/default-pic.jpg" alt="">
-                <h6>{{this.doctorDetails.specialization | uppercase}}</h6>
-                <h4 class="fw-bold" style="color: var(--secondary-color)">Dr. {{this.doctorDetails.name|titlecase}}</h4>
-                <h6>( {{this.doctorDetails.qualification | uppercase}} )</h6>
-                <h5><span
+                <img *ngIf="!doctorDetails.profileImgUrl" src="/assets/default.jpg" alt="">
+                <div class="name-sec">
+                    <h6>{{this.doctorDetails.specialization | uppercase}}</h6>
+                    <h4 class="fw-bold" style="color: var(--secondary-color)">Dr. {{this.doctorDetails.name|titlecase}}</h4>
+                    <h6>( {{this.doctorDetails.qualification | uppercase}} )</h6>
+                </div>
+                <h5 class="mt-4 mb-4"><span
                     *ngFor="let star of getStarArray(doctorDetails.rating)"><i class="bi bi-star-fill"
-                      style="color: rgb(216, 151, 30);margin-right: 3px;"></i>
+                      style="color: rgb(216, 151, 30);margin-right: 0.5rem;"></i>
                     </span> </h5>
-                <h6><span>Experience: </span>{{getDoctorExperience()}} years</h6>
-                <h6><span>Gender: </span>{{doctorDetails.gender === 'M' ?  'Male' : 'Female' }}</h6>
-                <h5><i class="fa fa-stethoscope"></i> Consultation fee: &#8377; {{doctorDetails.fees}}</h5>
+                    <h6 style="font-size: 1.1rem; margin-bottom: 1rem"><span>Experience: </span>{{getDoctorExperience()}} years</h6>
+                    <h6 style="font-size: 1.1rem; margin-bottom: 1rem"><span>Gender: </span>{{doctorDetails.gender === 'M' ?  'Male' : 'Female' }}</h6>
+                <h5><i class="fa fa-stethoscope" style="color:var(--secondary-color);"></i> Consultation fee: &#8377; {{doctorDetails.fees}}</h5>
             </div>
-
+            <div class="address">
+                <h5 style="margin-bottom: 5px;">Address</h5>
+                <h6 class="text-muted">Medicare clinic</h6>
+                <h6 class="text-muted">Sector V</h6>
+                <h6 class="text-muted">Thakari road , Kolkata</h6>
+            </div>
         </div>
         <div class="booking">
             <div id="booking-title" class="w-100 text-center">

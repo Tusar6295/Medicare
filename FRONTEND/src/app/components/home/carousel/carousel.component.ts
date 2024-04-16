@@ -7,6 +7,7 @@ import { LoginService } from 'src/app/services/login.service';
 import { UserConfirmationComponent } from 'src/app/modals/user-confirmation/user-confirmation.component';
 import { MatDialog } from '@angular/material/dialog';
 import { specializationDTO } from '../../admin/models/specializationDTO';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-carousel',
@@ -43,7 +44,8 @@ export class CarouselComponent {
     private userService: UserService,
     private loginService: LoginService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ngLoader: NgxUiLoaderService
   ) {}
 
   ngOnInit(): void {
@@ -79,7 +81,9 @@ export class CarouselComponent {
         });
       } else {
         console.log(doctor);
+        this.ngLoader.startLoader('master');
         this.router.navigate(['/slot-booking', doctor.id]);
+        this.ngLoader.stopLoader('master');;
       }
     }
   }

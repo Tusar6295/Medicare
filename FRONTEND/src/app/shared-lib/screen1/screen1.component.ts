@@ -115,9 +115,9 @@ export class Screen1Component {
         })
       } else {
         console.log(doctor);
-        this.ngLoader.startLoader('loader-01');
-        this.router.navigate(['/app-doctor-slot-booking-screen', doctor.id]);
-        this.ngLoader.stopLoader('loader-01');
+        this.ngLoader.startLoader('master');
+        this.router.navigate(['/slot-booking', doctor.id]);
+        this.ngLoader.stopLoader('master');
       }
     }
   }

@@ -11,7 +11,7 @@
 
 .profile{
     width: 25%;
-    padding: 0.8rem;
+    padding: 2rem 0;
     border: 1px solid rgb(208, 205, 205);
     height: 100%;
     border-radius: 0.5rem;
@@ -23,11 +23,31 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
+    padding: 0 0.8rem;
 }
 
 .details img{
-    width: 80%;
+    margin-bottom: 1.5rem;
+    width: 10rem;
+    height: 10rem;
     border-radius: 50%;
+}
+
+.name-sec{
+    display:flex;
+    flex-direction: column;
+    gap: 0.8rem;;
+}
+
+.address{
+    border-top: 1px solid #d6d6d6;
+    margin-top: 1.5rem;
+    padding: 1rem 1rem;
+    align-self: self-start;
+    text-align: left;
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 
@@ -232,3 +252,7 @@ hr{
 .legend-item3{
     background-color: rgba(194, 174, 60, 0.8);
 }
+
+h6,h5,h4{
+    margin: 0;
+  }
