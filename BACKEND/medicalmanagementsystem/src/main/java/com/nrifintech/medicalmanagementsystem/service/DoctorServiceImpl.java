@@ -354,13 +354,13 @@ public class DoctorServiceImpl implements DoctorService {
         return doctor;
     }
 
-    public Specialization addSpecialization(SpecializationDTO specializationDTO) {
+    public Specialization addSpecialization(SpecializationDTO specializationDTO) throws specializationAlreadyExistsException {
         Specialization specialization1 = specializationRepository.findByNameIgnoreCase(specializationDTO.getName());
         System.out.println(specialization1);
 
         if (specialization1 != null) {
             throw new specializationAlreadyExistsException(
-                    "Specialization already exists with name" + specializationDTO.getName());
+                    "Specialization already exists");
         }
 
         Specialization specialization = new Specialization();
@@ -376,7 +376,7 @@ public class DoctorServiceImpl implements DoctorService {
 
         if (specialization == null) {
             throw new IllegalArgumentException(
-                    "Specialization not found with name and id " + specializationDTO.getName() + ", " + id);
+                    "Specialization not found");
         }
 
         specialization.setName(specializationDTO.getName());

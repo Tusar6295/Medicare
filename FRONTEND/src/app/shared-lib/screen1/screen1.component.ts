@@ -14,6 +14,7 @@ import { Doctor } from 'src/app/models/doctor';
 import { LoginService } from 'src/app/services/login.service';
 import { UserConfirmationComponent } from 'src/app/modals/user-confirmation/user-confirmation.component';
 import { IToast, NgToastService } from 'ng-angular-popup';
+import { NgxUiLoaderBlurredDirective, NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-screen1',
@@ -47,7 +48,8 @@ export class Screen1Component {
     private loginService: LoginService,
     private router: Router,
     private dialog:MatDialog,
-    private toast: NgToastService
+    private toast: NgToastService,
+    private ngLoader: NgxUiLoaderService,
   ) {}
 
   setPage(i: any, event: any) {
@@ -113,10 +115,13 @@ export class Screen1Component {
         })
       } else {
         console.log(doctor);
-        this.router.navigate(['/slot-booking', doctor.id]);
+        this.ngLoader.startLoader('loader-01');
+        this.router.navigate(['/app-doctor-slot-booking-screen', doctor.id]);
+        this.ngLoader.stopLoader('loader-01');
       }
     }
   }
+
   getCurrentYear(): number {
     return new Date().getFullYear();
   }

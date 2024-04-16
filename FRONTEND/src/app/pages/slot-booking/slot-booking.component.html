@@ -1,13 +1,19 @@
- <app-navbar></app-navbar>
+<app-navbar></app-navbar>
     <div class="main-container">
         <div class="profile ">
             <div class="details">
                 <img *ngIf="doctorDetails.profileImgUrl" [src]="doctorDetails.profileImgUrl" alt="">
                 <img *ngIf="!doctorDetails.profileImgUrl" src="/assets/default-pic.jpg" alt="">
                 <h6>{{this.doctorDetails.specialization | uppercase}}</h6>
-                <h5>Dr. {{this.doctorDetails.name|titlecase}}</h5>
-                <h6>{{this.doctorDetails.qualification | uppercase}}</h6>
-                
+                <h4 class="fw-bold" style="color: var(--secondary-color)">Dr. {{this.doctorDetails.name|titlecase}}</h4>
+                <h6>( {{this.doctorDetails.qualification | uppercase}} )</h6>
+                <h5><span
+                    *ngFor="let star of getStarArray(doctorDetails.rating)"><i class="bi bi-star-fill"
+                      style="color: rgb(216, 151, 30);margin-right: 3px;"></i>
+                    </span> </h5>
+                <h6><span>Experience: </span>{{getDoctorExperience()}} years</h6>
+                <h6><span>Gender: </span>{{doctorDetails.gender === 'M' ?  'Male' : 'Female' }}</h6>
+                <h5><i class="fa fa-stethoscope"></i> Consultation fee: &#8377; {{doctorDetails.fees}}</h5>
             </div>
 
         </div>

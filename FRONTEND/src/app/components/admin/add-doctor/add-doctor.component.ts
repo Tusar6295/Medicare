@@ -247,7 +247,7 @@ export class AddDoctorComponent implements OnInit {
         error: (err: HttpErrorResponse) => {
           this.toast.error({
             detail: 'ERROR',
-            summary: 'Something Went Wrong',
+            summary: `${err.error.message}` ,
             duration: 3000,
           });
           console.log('something went wrong', err);
@@ -273,6 +273,11 @@ export class AddDoctorComponent implements OnInit {
               });
             },
             error: (err: HttpErrorResponse) => {
+              this.toast.error({
+                detail: 'ERROR',
+                summary: `${err.error.message}` ,
+                duration: 3000,
+              });
               console.log('something went wrong', err);
               this.ngLoader.stopLoader('master');
             },

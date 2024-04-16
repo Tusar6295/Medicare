@@ -40,15 +40,15 @@ export class AdminHomeComponent implements OnInit {
       datasets: [{
         label: 'Patient Visit Data For Last 7 Days',
         data: Object.values(this.dashboardData.dailyCompletedAppointments),
-        backgroundColor: '#41BD81',
-        // borderColor: "#80b6f4",
-        // pointBorderColor: "#80b6f4",
-        // borderWidth: 3, 
-        // pointRadius:6,
+        // backgroundColor: '#41BD81',
+        borderColor: "#80b6f4",
+        pointBorderColor: "#80b6f4",
+        borderWidth: 3, 
+        pointRadius:6,
         // pointHoverBackgroundColor: "#80b6f4",
         // pointHoverBorderColor: "#80b6f4",
-        // pointHoverRadius: 10,
-        // pointHoverBorderWidth: 1,
+        pointHoverRadius: 10,
+        pointHoverBorderWidth: 1,
         fill: false,
       }]
     };
@@ -99,7 +99,7 @@ export class AdminHomeComponent implements OnInit {
     };
 
     this.chart = new Chart(this.chartRef.nativeElement, {
-      type: 'bar',
+      type: 'line',
       data: chartData,
       options: chartOptions
     });

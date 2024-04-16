@@ -262,6 +262,10 @@ export class SlotBookingComponent implements OnInit {
     return this.bookedWithOtherDoctor.hasOwnProperty(slot);
   }
 
+  getDoctorExperience(){
+    const date = new Date().getFullYear();
+    return date - parseInt(this.doctorDetails.experienceStart);
+  }
  
 
   customOptions: OwlOptions = {
