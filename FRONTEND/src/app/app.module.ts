@@ -42,20 +42,6 @@ import { AppointmentComponentGlobal } from './pages/appointment/appointment.comp
 import { LoginComponent } from './pages/login/login.component';
 import { Screen1Component } from './shared-lib/screen1/screen1.component';
 
-
-const ngxUiLoaderConfig: NgxUiLoaderConfig = {
-  bgsColor: '#ffffff', // Background color
-  bgsOpacity: 0.5, // Background opacity
-  bgsPosition: POSITION.bottomRight, // Background position
-  bgsSize: 60, // Background size
-  fgsType: SPINNER.ballSpin, // Foreground spinner type
-  fgsPosition: POSITION.bottomRight,
-  pbColor: '#000000', // Progress bar color
-  pbDirection: PB_DIRECTION.leftToRight, // Progress bar direction
-  pbThickness: 5, // Progress bar thickness
-  fgsColor: '#000000' // Foreground spinner color
-};
-
 import { CompletedAppointmentsComponentPatient } from './components/patient/completed-appointments/completed-appointments.component';
 import { UpcomingAppointmentsComponentPatient } from './components/patient/upcoming-appointments/upcoming-appointments.component';
 import { UpdateProfileComponentPatient } from './components/patient/update-profile/update-profile.component';
@@ -138,12 +124,12 @@ import { SlotBookingComponent } from './pages/slot-booking/slot-booking.componen
     CarouselModule,
     NgxAwesomePopupModule.forRoot({
       colorList: {
-        success: '#3caea3', // optional
-        info: '#2f8ee5', // optional
-        warning: '#198754', // optional
-        danger: '#e46464', // optional
-        customOne: '#3ebb1a', // optional
-        customTwo: '#bd47fa', // optional (up to custom five)
+        success: '#3caea3', 
+        info: '#2f8ee5',
+        warning: '#198754', 
+        danger: '#e46464', 
+        customOne: '#3ebb1a', 
+        customTwo: '#bd47fa', 
       },
     }),
     ConfirmBoxConfigModule.forRoot(),
